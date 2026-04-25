@@ -6,6 +6,9 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
+Class = require "class"
+
+require "Bird"
 local backgroundScroll = 0
 
 local groundScroll = 0
@@ -18,9 +21,10 @@ local BACKGROUND_LOOPING_POINT = 413
 function love.load()
     -- Load assets, initialize variables, etc.
     love.graphics.setDefaultFilter("nearest", "nearest")
+
     Background = love.graphics.newImage("background.png")
     Ground = love.graphics.newImage("ground.png")
-
+    
     love.window.setTitle("Flappy Bird")
 
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -30,6 +34,7 @@ function love.load()
     })
 
     push.setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, { upscale = "normal" })
+    bird = Bird()
 end
 
 function love.resize(w, h)
@@ -59,5 +64,6 @@ function love.draw()
 
     love.graphics.draw(Ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
+    bird:render()
     push.finish()
 end
