@@ -6,6 +6,14 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 512
 VIRTUAL_HEIGHT = 288
 
+local backgroundScroll = 0
+
+local groundScroll = 0
+
+local BACKGROUND_SCROLL_SPEED = 30
+local GROUND_SCROLL_SPEED = 60
+
+local BACKGROUND_LOOPING_POINT = 413
 
 function love.load()
     -- Load assets, initialize variables, etc.
@@ -30,6 +38,11 @@ end
 
 function love.update(dt)
     -- Update game state, handle input, etc.
+    -- scroll the background by the set speed * dt, looping back to 0 after the looping point
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+
+    -- scroll the ground by the set speed * dt, looping back to 0 after the width of the texture
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 end
 
 function love.keypressed(key)
@@ -42,9 +55,9 @@ function love.draw()
     -- Draw game objects, UI, etc.
     push.start()
 
-    love.graphics.draw(Background, 0, 0)
+    love.graphics.draw(Background, -backgroundScroll, 0)
 
-    love.graphics.draw(Ground, 0, VIRTUAL_HEIGHT - 16)
+    love.graphics.draw(Ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
     push.finish()
 end
