@@ -35,6 +35,7 @@ function love.load()
 
     push.setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, { upscale = "normal" })
     bird = Bird()
+    love.keyboard.keysPressed = {}
 end
 
 function love.resize(w, h)
@@ -48,14 +49,26 @@ function love.update(dt)
 
     -- scroll the ground by the set speed * dt, looping back to 0 after the width of the texture
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    bird:update(dt)
+
+    -- reset input table
+    love.keyboard.keysPressed = {}
 end
 
 function love.keypressed(key)
+    love.keyboard.keysPressed[key] = true
     if key == "escape" then
         love.event.quit()
     end
 end
 
+function love.keyboard.wasPressed(key)
+    if love.keyboard.keysPressed[key] then
+        return true
+    else
+        return false
+    end
+end
 function love.draw()
     -- Draw game objects, UI, etc.
     push.start()
