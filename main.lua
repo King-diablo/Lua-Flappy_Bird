@@ -46,6 +46,7 @@ function love.load()
     })
 
     push.setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, { upscale = "normal" })
+  
     gStateMachine = StateMachine {
         ["title"] = function() return TitleScreen() end,
         ["play"] = function() return Play() end,
@@ -82,15 +83,26 @@ function love.keyboard.wasPressed(key)
     else
         return false
     end
+
+    -- reset input table
+    love.keyboard.keysPressed = {}
 end
 
 function love.keypressed(key)
+    love.keyboard.keysPressed[key] = true
     if key == "escape" then
         love.event.quit()
     end
     love.keyboard.keysPressed[key] = true
 end
 
+function love.keyboard.wasPressed(key)
+    if love.keyboard.keysPressed[key] then
+        return true
+    else
+        return false
+    end
+end
 function love.draw()
     -- Draw game objects, UI, etc.
     push.start()
