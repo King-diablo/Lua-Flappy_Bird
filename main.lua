@@ -11,6 +11,10 @@ Class = require "class"
 require "Bird"
 require "Pipe"
 require "PipePair"
+require "StateMachine"
+require "states.Base"
+require "states.Play"
+require "states.TitleScreen"
 local backgroundScroll = 0
 
 local groundScroll = 0
@@ -20,9 +24,6 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 
-local pipePairs = {}
-local spawnTimer = 0
-local lastY = -PIPE_HEIGHT + math.random(80) + 20
 function love.load()
     -- Load assets, initialize variables, etc.
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -30,6 +31,12 @@ function love.load()
     Background = love.graphics.newImage("background.png")
     Ground = love.graphics.newImage("ground.png")
     
+    smallFont = love.graphics.newFont("font.ttf", 8)
+    flappyFont = love.graphics.newFont("flappy.ttf", 28)
+    mediumFont = love.graphics.newFont("flappy.ttf", 14)
+    hugeFont = love.graphics.newFont("flappy.ttf", 56)
+
+    love.graphics.setFont(flappyFont)
     love.window.setTitle("Flappy Bird")
 
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -39,7 +46,15 @@ function love.load()
     })
 
     push.setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, { upscale = "normal" })
-    bird = Bird()
+    gStateMachine = StateMachine {
+        ["title"] = function() return TitleScreen() end,
+        ["play"] = function() return Play() end,
+    }
+
+    gStateMachine:change("title")
+
+    -- initialize input table
+    love.keyboard.keysPressed = {}
 end
 
 function love.resize(w, h)
@@ -53,25 +68,19 @@ function love.update(dt)
 
     -- scroll the ground by the set speed * dt, looping back to 0 after the width of the texture
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
-    spawnTimer = spawnTimer + dt
+    gStateMachine:update(dt)
+    love.keyboard.keysPressed = {}
+end
 
-    if spawnTimer > 2 then
-        local y = math.max(-PIPE_HEIGHT + 10, math.min(lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
-        lastY = y
-
-        table.insert(pipePairs, PipePair(y))
-        -- print('Added new pipe!')
-        spawnTimer = 0
-    end
-
-    for k, pair in pairs(pipePairs) do
-        pair:update(dt)
-    end
-
-    for k, pair in pairs(pipePairs) do
-        if pair.remove then
-            table.remove(pipePairs, k)
-        end
+--[[
+    New function used to check our global input table for keys we activated during
+    this frame, looked up by their string value.
+]]
+function love.keyboard.wasPressed(key)
+    if love.keyboard.keysPressed[key] then
+        return true
+    else
+        return false
     end
 end
 
@@ -79,6 +88,7 @@ function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
     end
+    love.keyboard.keysPressed[key] = true
 end
 
 function love.draw()
@@ -87,12 +97,8 @@ function love.draw()
 
     love.graphics.draw(Background, -backgroundScroll, 0)
 
+    gStateMachine:render()
     love.graphics.draw(Ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-
-    for k, pair in pairs(pipePairs) do
-        pair:render()
-    end
-    bird:render()
 
     push.finish()
 end
