@@ -1,6 +1,6 @@
 Play = Class { __includes = Base }
 
-PIPE_SPEED = 60
+PIPE_SPEED = 100
 PIPE_WIDTH = 70
 PIPE_HEIGHT = 288
 
@@ -38,11 +38,9 @@ function Play:update(dt)
 
     self.bird:update(dt)
 
-    self.bird:update(dt)
-
     for k in pairs(self.pipePairs) do
         for l, pipe in pairs(self.pipePairs[k].pipes) do
-            if self.bird:collides(pipe) then
+            if self.bird:collision(pipe) then
                 gStateMachine:change("title")
             end
         end
@@ -57,5 +55,5 @@ function Play:render()
     for k, pair in pairs(self.pipePairs) do
         pair:render()
     end
-    self.bird:render()
+    self.bird:display()
 end

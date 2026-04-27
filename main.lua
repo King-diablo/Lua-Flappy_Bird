@@ -15,6 +15,7 @@ require "StateMachine"
 require "states.Base"
 require "states.Play"
 require "states.TitleScreen"
+
 local backgroundScroll = 0
 
 local groundScroll = 0
@@ -96,13 +97,7 @@ function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
 end
 
-function love.keyboard.wasPressed(key)
-    if love.keyboard.keysPressed[key] then
-        return true
-    else
-        return false
-    end
-end
+
 function love.draw()
     -- Draw game objects, UI, etc.
     push.start()
