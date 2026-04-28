@@ -14,6 +14,7 @@ require "PipePair"
 require "StateMachine"
 require "states.Base"
 require "states.Play"
+require "states.Score"
 require "states.TitleScreen"
 
 local backgroundScroll = 0
@@ -24,6 +25,7 @@ local BACKGROUND_SCROLL_SPEED = 30
 local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
+
 
 function love.load()
     -- Load assets, initialize variables, etc.
@@ -51,6 +53,7 @@ function love.load()
     gStateMachine = StateMachine {
         ["title"] = function() return TitleScreen() end,
         ["play"] = function() return Play() end,
+        ["score"] = function() return Score() end,
     }
 
     gStateMachine:change("title")
