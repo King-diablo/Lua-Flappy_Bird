@@ -69,3 +69,4 @@ end
 function Bird:display()
     love.graphics.draw(self.image, self.x, self.y, math.rad(JUMP_ROTATION))
 end
+end
