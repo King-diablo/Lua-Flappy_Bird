@@ -15,6 +15,7 @@ require "StateMachine"
 require "states.Base"
 require "states.Play"
 require "states.Score"
+require "states.Countdown"
 require "states.TitleScreen"
 
 local backgroundScroll = 0
@@ -52,6 +53,7 @@ function love.load()
   
     gStateMachine = StateMachine {
         ["title"] = function() return TitleScreen() end,
+        ["countdown"] = function() return Countdown() end,
         ["play"] = function() return Play() end,
         ["score"] = function() return Score() end,
     }
