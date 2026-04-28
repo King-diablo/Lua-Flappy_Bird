@@ -25,6 +25,7 @@ function Bird:update(dt)
 
     if love.keyboard.wasPressed("space") then
         self.dy = -300
+        gSounds["jump"]:play()
         if self.canAnimate then
             JUMP_ROTATION = -30
         end
