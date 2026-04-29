@@ -1,6 +1,6 @@
 Bird = Class {}
 
-local GRAVITY = 980
+local GRAVITY = 850
 local JUMP_ROTATION = 0;
 local fallSpeed = 60
 
@@ -24,8 +24,12 @@ function Bird:update(dt)
     self.dy = self.dy + GRAVITY * dt
 
     if love.keyboard.wasPressed("space") then
+<<<<<<< Audio
         self.dy = -300
         gSounds["jump"]:play()
+=======
+        self.dy = -200
+>>>>>>> main
         if self.canAnimate then
             JUMP_ROTATION = -30
         end
