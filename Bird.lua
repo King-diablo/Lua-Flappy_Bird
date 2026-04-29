@@ -1,6 +1,6 @@
 Bird = Class {}
 
-local GRAVITY = 980
+local GRAVITY = 850
 local JUMP_ROTATION = 0;
 local fallSpeed = 60
 
@@ -23,8 +23,8 @@ end
 function Bird:update(dt)
     self.dy = self.dy + GRAVITY * dt
 
-    if love.keyboard.wasPressed("space") or love.mouse.wasPressed(1) then
-        self.dy = -300
+    if love.keyboard.wasPressed("space") then
+        self.dy = -200
         if self.canAnimate then
             JUMP_ROTATION = -30
         end

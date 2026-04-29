@@ -13,6 +13,7 @@ function Play:init()
     self.timer = 0
 
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
+    self.score = 0;
 end
 
 function Play:update(dt)
@@ -27,6 +28,12 @@ function Play:update(dt)
     end
 
     for k, pair in pairs(self.pipePairs) do
+        if not pair.scored then
+            if pair.x + PIPE_WIDTH < self.bird.x then
+                self.score = self.score + 1
+                pair.scored = true
+            end
+        end
         pair:update(dt)
     end
 
@@ -41,13 +48,17 @@ function Play:update(dt)
     for k in pairs(self.pipePairs) do
         for l, pipe in pairs(self.pipePairs[k].pipes) do
             if self.bird:collision(pipe) then
-                gStateMachine:change("title")
+                gStateMachine:change("score", {
+                    score = self.score
+                })
             end
         end
     end
 
-    if self.bird.y > VIRTUAL_HEIGHT then
-        gStateMachine:change("title")
+    if self.bird.y > VIRTUAL_HEIGHT - 15 then
+        gStateMachine:change("score", {
+            score = self.score
+        })
     end
 end
 
