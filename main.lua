@@ -43,13 +43,6 @@ function love.load()
     love.graphics.setFont(flappyFont)
     love.window.setTitle("Flappy Bird")
 
-    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
-        vsync = true,
-        fullscreen = false,
-        resizable = true
-    })
-
-    push.setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, { upscale = "normal" })
   
     gStateMachine = StateMachine {
         ["title"] = function() return TitleScreen() end,
@@ -58,8 +51,28 @@ function love.load()
         ["score"] = function() return Score() end,
     }
 
+    gSounds = {
+        ["jump"] = love.audio.newSource("audio/jump.wav", "static"),
+        ["explosion"] = love.audio.newSource("audio/explosion.wav", "static"),
+        ["hurt"] = love.audio.newSource("audio/hurt.wav", "static"),
+        ["score"] = love.audio.newSource("audio/score.wav", "static"),
+
+        -- https://freesound.org/people/xsgianni/sounds/388079
+
+        ["music"] = love.audio.newSource("audio/marios_way.mp3", "static"),
+    }
+
+    gSounds["music"]:setLooping(true)
+    gSounds["music"]:play()
     gStateMachine:change("title")
 
+    love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
+        vsync = true,
+        fullscreen = false,
+        resizable = true
+    })
+
+    push.setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, { upscale = "normal" })
     -- initialize input table
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}

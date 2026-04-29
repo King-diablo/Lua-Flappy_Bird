@@ -48,6 +48,8 @@ function Play:update(dt)
     for k in pairs(self.pipePairs) do
         for l, pipe in pairs(self.pipePairs[k].pipes) do
             if self.bird:collision(pipe) then
+
+                gSounds["explosion"]:play()
                 gStateMachine:change("score", {
                     score = self.score
                 })

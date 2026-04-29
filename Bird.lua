@@ -24,7 +24,12 @@ function Bird:update(dt)
     self.dy = self.dy + GRAVITY * dt
 
     if love.keyboard.wasPressed("space") then
+<<<<<<< Audio
+        self.dy = -300
+        gSounds["jump"]:play()
+=======
         self.dy = -200
+>>>>>>> main
         if self.canAnimate then
             JUMP_ROTATION = -30
         end
@@ -67,4 +72,5 @@ end
 
 function Bird:display()
     love.graphics.draw(self.image, self.x, self.y, math.rad(JUMP_ROTATION))
+end
 end
