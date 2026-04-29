@@ -62,6 +62,7 @@ function love.load()
 
     -- initialize input table
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.resize(w, h)
@@ -77,6 +78,7 @@ function love.update(dt)
     groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
     gStateMachine:update(dt)
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 --[[
@@ -89,9 +91,6 @@ function love.keyboard.wasPressed(key)
     else
         return false
     end
-
-    -- reset input table
-    love.keyboard.keysPressed = {}
 end
 
 function love.keypressed(key)
@@ -102,6 +101,14 @@ function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
 end
 
+function love.mousepressed(x, y, button)
+    print(x, y)
+    love.mouse.buttonsPressed[button] = true
+end
+
+function love.mouse.wasPressed(button)
+    return love.mouse.buttonsPressed[button]
+end
 
 function love.draw()
     -- Draw game objects, UI, etc.
