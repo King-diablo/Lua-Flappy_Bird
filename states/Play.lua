@@ -31,6 +31,7 @@ function Play:update(dt)
         if not pair.scored then
             if pair.x + PIPE_WIDTH < self.bird.x then
                 self.score = self.score + 1
+                gSounds["score"]:play()
                 pair.scored = true
             end
         end
@@ -45,10 +46,12 @@ function Play:update(dt)
 
     self.bird:update(dt)
 
+
     for k in pairs(self.pipePairs) do
         for l, pipe in pairs(self.pipePairs[k].pipes) do
             if self.bird:collision(pipe) then
 
+                gSounds["hurt"]:play()
                 gSounds["explosion"]:play()
                 gStateMachine:change("score", {
                     score = self.score
@@ -57,7 +60,9 @@ function Play:update(dt)
         end
     end
 
-    if self.bird.y > VIRTUAL_HEIGHT - 15 then
+    if self.bird.y > VIRTUAL_HEIGHT - 20 then
+        gSounds["hurt"]:play()
+        gSounds["explosion"]:play()
         gStateMachine:change("score", {
             score = self.score
         })
@@ -69,4 +74,11 @@ function Play:render()
         pair:render()
     end
     self.bird:display()
+    love.graphics.setFont(mediumFont)
+    love.graphics.printf(tostring(self.score), 10, 10, VIRTUAL_WIDTH, "left")
+
+    if isPaused then
+        love.graphics.setFont(hugeFont)
+        love.graphics.printf("PAUSED", 0, 100, VIRTUAL_WIDTH, "center")
+    end
 end

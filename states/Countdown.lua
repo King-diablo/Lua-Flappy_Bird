@@ -15,6 +15,7 @@ function Countdown:update(dt)
 
         if self.count == 0 then
             gStateMachine:change("play")
+            isPlaying = true;
         end
     end
 end

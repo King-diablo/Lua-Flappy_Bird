@@ -27,6 +27,8 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 
+isPaused = false
+isPlaying = false
 
 function love.load()
     -- Load assets, initialize variables, etc.
@@ -83,6 +85,9 @@ function love.resize(w, h)
 end
 
 function love.update(dt)
+    if isPlaying and isPaused then
+        return
+    end
     -- Update game state, handle input, etc.
     -- scroll the background by the set speed * dt, looping back to 0 after the looping point
     backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
@@ -110,6 +115,13 @@ function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
     if key == "escape" then
         love.event.quit()
+    end
+    if key == "p" and isPlaying then
+        if isPaused then
+            isPaused = false
+        else
+            isPaused = true
+        end
     end
     love.keyboard.keysPressed[key] = true
 end

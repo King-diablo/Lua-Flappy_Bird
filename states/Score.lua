@@ -2,6 +2,7 @@ Score = Class { __includes = Base }
 
 function Score:enter(params)
     self.score = params.score
+    isPlaying = false
 end
 
 function Score:update(dt)
